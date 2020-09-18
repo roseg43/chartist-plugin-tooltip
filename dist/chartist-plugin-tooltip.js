@@ -46,7 +46,8 @@
         } else if (chart.constructor.name ==  Chartist.Pie.prototype.constructor.name) {
           // Added support for donut graph
           if (chart.options.donut) {
-            tooltipSelector = 'ct-slice-donut';
+            // Added support or SOLID donut graph
+            tooltipSelector = chart.options.donutSolid ? 'ct-slice-donut-solid' : 'ct-slice-donut';
           } else {
             tooltipSelector = 'ct-slice-pie';
           }
@@ -75,6 +76,14 @@
           });
         }
 
+        function getElementIndex(node) {
+          var index = 0;
+          while ( (node = node.previousElementSibling) ) {
+              index++;
+          }
+          return index;
+      }
+
         on('mouseover', tooltipSelector, function (event) {
           var $point = event.target;
           var tooltipText = '';
@@ -84,13 +93,14 @@
           var meta = $point.getAttribute('ct:meta') || seriesName || '';
           var hasMeta = !!meta;
           var value = $point.getAttribute('ct:value');
+          var index = getElementIndex($point.parentElement);
 
           if (options.transformTooltipTextFnc && typeof options.transformTooltipTextFnc === 'function') {
             value = options.transformTooltipTextFnc(value);
           }
 
           if (options.tooltipFnc && typeof options.tooltipFnc === 'function') {
-            tooltipText = options.tooltipFnc(meta, value);
+            tooltipText = options.tooltipFnc(meta, value, index);
           } else {
             if (options.metaIsHTML) {
               var txt = document.createElement('textarea');
