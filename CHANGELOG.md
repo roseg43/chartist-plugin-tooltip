@@ -1,6 +1,8 @@
 # Chartist Plugin Tooltip Changelog
 
 ### master
+### 0.0.12
+* [ENHANCEMENT] Added slice index to custom tooltipFnc
 
 ### 0.0.11
 * [BUGFIX] Tooltips now working properly on Firefox
